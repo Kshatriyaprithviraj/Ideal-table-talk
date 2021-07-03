@@ -1,11 +1,28 @@
 const express = require('express');
 const ejs = require('ejs');
 const http = require('http');
+const cookieParser = require('cookie-parser');
+const validator = require('express-validator');
+const session = require('express-session');
+const mongoStore = require('connect-mongo')(session);
+const mongoose = require('mongoose');
+const passport = require('passport');
+
+// Four different flash messages modules.
+const flash = require('flash');
+const expressFlash = require('express-flash');
+const expressFlashMsg = require('express-flash-message');
+const connectFlash = require('connect-flash');
+
 const container = require('./container');
 
 const port = 3001;
 
 container.resolve(function (users) {
+  mongoose.Promise = global.Promise;
+  const connectLink = 'mongodb://localhost:27017/chatdb';
+  mongoose.connect(connectLink, { useNewUrlParser: true });
+
   const app = SetupExpress();
 
   function SetupExpress() {
@@ -31,8 +48,44 @@ container.resolve(function (users) {
 
   function ConfigureExpress(app) {
     app.use(express.static('public'));
+    app.use(cookieParser());
     app.set('view engine', 'ejs');
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
+
+    app.use(validator());
+    app.use(
+      session({
+        secret: 'SeCrETkEy',
+        resave: true,
+        saveUninitialized: true,
+        store: new mongoStore({
+          mongooseConnection: mongoose.connection,
+        }),
+      })
+    );
+
+    /**
+     * Flash messages for express.
+     * There're four working modules available for flash messages in express and are -
+     * - flash
+     * - express-flash
+     * - express-flash-messages
+     * - connect-flash (this one's legacy one from express 2.x)
+     * Now based on that, there're 4 same implementations for flash messages
+     * which implement it in their own way. So, use the one (modules) that
+     * suits your comfortablility best and comment the rest.
+     *
+     * Using flash module - app.use(flash());
+     * Using express-flash module - app.use(expressFlash());
+     * Using express-flash-message module.- app.use(expressFlashMsg());
+     * Using connect-flash module - app.use(connectFlash());
+     */
+
+    // Using flash module.
+    app.use(flash());
+
+    app.use(passport.initialize());
+    app.use(passport.session());
   }
 });
