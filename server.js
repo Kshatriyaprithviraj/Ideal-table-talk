@@ -3,7 +3,7 @@ const ejs = require('ejs');
 const http = require('http');
 const container = require('./container');
 
-const port = 3000;
+const port = 3001;
 
 container.resolve(function (users) {
   const app = SetupExpress();
@@ -25,7 +25,7 @@ container.resolve(function (users) {
      */
 
     const router = require('express-promise-router')();
-    users.SetRouting();
+    users.SetRouting(router);
     app.use(router);
   }
 

@@ -3,7 +3,7 @@ const path = require('path');
 
 const container = dependable.container();
 
-const simpleDependencies = [['_', 'loadash']];
+const simpleDependencies = [['_', 'lodash']];
 
 simpleDependencies.forEach(function (value) {
   container.register(value[0], function () {
