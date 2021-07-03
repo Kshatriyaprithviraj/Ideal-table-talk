@@ -71,7 +71,7 @@ container.resolve(function (users) {
      * - flash
      * - express-flash
      * - express-flash-messages
-     * - connect-flash (this one's legacy one from express 2.x)
+     * - connect-flash (this one's legacy from express 2.x)
      * Now based on that, there're 4 same implementations for flash messages
      * which implement it in their own way. So, use the one (modules) that
      * suits your comfortablility best and comment the rest.
