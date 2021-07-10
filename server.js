@@ -10,9 +10,11 @@ const passport = require('passport');
 
 // Four different flash messages modules.
 const flash = require('flash');
-const expressFlash = require('express-flash');
-const expressFlashMsg = require('express-flash-message');
-const connectFlash = require('connect-flash');
+
+// Uncomment one of the below as preferred.
+// const expressFlash = require('express-flash');
+// const expressFlashMsg = require('express-flash-message');
+// const connectFlash = require('connect-flash');
 
 const container = require('./container');
 
