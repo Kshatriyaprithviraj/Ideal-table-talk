@@ -2,9 +2,10 @@ const express = require('express');
 const ejs = require('ejs');
 const http = require('http');
 const cookieParser = require('cookie-parser');
-const validator = require('express-validator');
+const { body, validationResult } = require('express-validator');
+// const validator = require('express-validator');
 const session = require('express-session');
-const mongoStore = require('connect-mongo')(session);
+const mongoStore = require('connect-mongodb-session')(session);
 const mongoose = require('mongoose');
 const passport = require('passport');
 
@@ -23,7 +24,10 @@ const port = 3001;
 container.resolve(function (users) {
   mongoose.Promise = global.Promise;
   const connectLink = 'mongodb://localhost:27017/chatdb';
-  mongoose.connect(connectLink, { useNewUrlParser: true });
+  mongoose.connect(connectLink, {
+    useNewUrlParser: true,
+  });
+  mongoose.set('useUnifiedTopology', true);
 
   const app = SetupExpress();
 
@@ -55,7 +59,22 @@ container.resolve(function (users) {
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
 
-    app.use(validator());
+    // app.use(validator());
+    app.post(
+      '/user',
+      body('username').isEmail(),
+      body('password').isLength({ min: 6 }),
+      (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+          return res.status(400).json({ errors: errors.array() });
+        }
+        User.create({
+          username: req.body.username,
+          password: req.body.password,
+        }).then((user) => res.json(user));
+      }
+    );
     app.use(
       session({
         secret: 'SeCrETkEy',
