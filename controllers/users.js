@@ -5,8 +5,9 @@ module.exports = function (_, passport) {
     SetRouting: function (router) {
       router.get('/', this.indexPage);
       router.get('/signup', this.getSignup);
-      // router.post('/signup', this.postSignup);
       router.get('/home', this.homePage);
+
+      router.post('/signup', this.postSignup);      
     },
     indexPage: function (req, res) {
       return res.render('index');
@@ -15,7 +16,8 @@ module.exports = function (_, passport) {
       return res.render('signup');
     },
     postSignup: passport.authenticate('local.signup', {
-      succesRedirect: '/home',
+
+      successRedirect: '/home',
       failureRedirect: '/signup',
       failureFlash: true,
     }),
