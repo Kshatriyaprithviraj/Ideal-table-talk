@@ -2,7 +2,7 @@
 
 const passport = require('passport');
 const User = require('../models/user');
-const LocalStrategy = require('passport-local');
+const LocalStrategy = require('passport-local').Strategy;
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
@@ -34,8 +34,8 @@ passport.use(
             req.flash('error', 'User with the email already exists')
           );
         }
-        const newUser = new User();
 
+        const newUser = new User();
         newUser.local.username = req.body.username;
         newUser.local.fullname = req.body.username;
         newUser.local.email = req.body.email;
