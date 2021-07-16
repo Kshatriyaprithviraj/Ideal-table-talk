@@ -35,6 +35,7 @@ passport.use(
           );
         }
         const newUser = new User();
+
         newUser.local.username = req.body.username;
         newUser.local.fullname = req.body.username;
         newUser.local.email = req.body.email;
