@@ -16,10 +16,6 @@ module.exports = function (_, passport) {
       return res.render('signup');
     },
     postSignup: passport.authenticate('local.signup', {
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/main
       successRedirect: '/home',
       failureRedirect: '/signup',
       failureFlash: true,
