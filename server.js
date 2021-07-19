@@ -1,4 +1,3 @@
-const bodyParser = require('body-parser');
 const express = require('express');
 const ejs = require('ejs');
 const http = require('http');
